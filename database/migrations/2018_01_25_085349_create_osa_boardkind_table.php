@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePasswordResetsTable extends Migration
+class CreateOsaBoardkindTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreatePasswordResetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('password_resets', function (Blueprint $table) {
-            $table->string('email')->index();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
+        Schema::create('OSA_BOARDKIND', function (Blueprint $table) {
+            $table->increments('KIND_SN')->comment('主鍵 (自動流水號)');
+            $table->string('KIND_DESC', 200)->comment('留言類別名稱');
         });
     }
 
@@ -27,6 +26,6 @@ class CreatePasswordResetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('password_resets');
+        Schema::dropIfExists('OSA_BOARDKIND');
     }
 }
