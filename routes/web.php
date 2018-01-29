@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/{board_kind?}', ['uses' => 'MessageBoardController@index']);
 
 Route::get('/board_notice', function () {
     return view('board_notice');

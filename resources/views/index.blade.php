@@ -29,73 +29,39 @@
             </h1>
 
             <!-- Blog Post -->
+            @foreach($message as $m_index => $m)
             <div class="card border-info article">
                 <div class="card border-light post">
                     <div class="card-header text-muted">
-                        <span href="#" class="badge badge-success">001</span>
-                        暱稱: <a href="mailto:test@gmail">黃立豪</a> (2018/01/01)
+                        <span href="#" class="badge badge-success">{{sprintf("%04d", $m->BOARD_SN)}}</span>
+                        暱稱: <a href="mailto:{{$m->BOARD_EMAIL}}">{{$m->BOARD_PETNAME}}</a> ({{substr($m->BOARD_TIME, 0, 16)}})
                         <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#ResponseModel" style="float:right;">
                             回覆 <i class="fas fa-check"></i>
                         </button>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">住宿生是否能換房</h5>
-                        <p class="card-text">如果住的房間裡面的人跟自己的生活作息相差太大(例如:同房住宿生經常晚上2、3點才睡，並且使用語音聊天)使晚上睡覺時非常難以入眠，能否申請換房換到同一層樓無人使用的空床位?</p>
+                        <h5 class="card-title">{{$m->BOARD_TITLE}}</h5>
+                        <p class="card-text">{{$m->BOARD_CONTENT}}</p>
                         {{--<a href="#" class="btn btn-primary">Read More &rarr;</a>--}}
                     </div>
                 </div>
                 <div class="dotted_line" style="border-top:1px dashed #cccccc;height: 1px;overflow:hidden"></div>
-                <div class="card border-light message">
-                    <div class="card-header text-muted">
-                        留言者: <a href="mailto:test@gmail">生輔組</a> (2018/01/01)
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">同學您好，如果有更換床位的需求，請先到生輔組辦公室（行政大樓一樓電梯旁）拿更換床位的申請單填寫，在填寫完畢後會再聯絡您進行一個訪談瞭解您目前的住宿狀況、實際需求和期待，視情況為您再做安排。</p>
-                    </div>
-                </div>
-                <div class="card border-light message">
-                    <div class="card-header text-muted">
-                        留言者: <a href="mailto:test@gmail">黃立豪</a> (2018/01/01)
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">謝謝生輔組的回覆!
-                        </p>
-                    </div>
-                </div>
+                @foreach($response as $r_index => $re)
+                    @if($m_index == $r_index)
+                        @foreach($re as $r)
+                        <div class="card border-light message">
+                            <div class="card-header text-muted">
+                                留言者: <a href="mailto:{{$r->BOARD_EMAIL}}">{{$r->BOARD_PETNAME}}</a> ({{substr($r->BOARD_TIME, 0, 16)}})
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">{{$r->BOARD_CONTENT}}</p>
+                            </div>
+                        </div>
+                        @endforeach
+                    @endif
+                @endforeach
             </div>
-
-            <div class="card border-info article">
-                <div class="card border-light post">
-                    <div class="card-header text-muted">
-                        <span href="#" class="badge badge-success">002</span>
-                        暱稱: <a href="mailto:test@gmail">黃立豪</a> (2018/01/01)
-                        <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#ResponseModel" style="float:right;">
-                            回覆 <i class="fas fa-check"></i>
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">男三宿廁所清潔</h5>
-                        <p class="card-text">男三宿清潔公司是否還有在清潔廁所
-                            學期初時宿舍的整潔一直都很好
-                            但在填完問卷後感覺就走樣了
-                            請問能否改善一下
-                            希望我還能看到當初的乾淨景象
-                            ps.我是4f的小學弟</p>
-                        {{--<a href="#" class="btn btn-primary">Read More &rarr;</a>--}}
-                    </div>
-                </div>
-                <div class="dotted_line" style="border-top:1px dashed #cccccc;height: 1px;overflow:hidden"></div>
-                <div class="card border-light message">
-                    <div class="card-header text-muted">
-                        留言者: <a href="mailto:test@gmail">生輔組</a> (2018/01/01)
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">同學您好:
-                            學生宿舍環境由清潔人員負責打掃，如同學認為宿舍公用廁所清潔有需改善之處，煩請至生輔組說明舍別及樓層，以便請清潔人員加強改善，謝謝您的協助!
-                        </p>
-                    </div>
-                </div>
-            </div>
+            @endforeach
 
 
             <!-- Pagination -->
