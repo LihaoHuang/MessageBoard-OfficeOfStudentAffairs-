@@ -171,6 +171,7 @@ return [
         Unisharp\Ckeditor\ServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Recca0120\LaravelTracy\LaravelTracyServiceProvider::class,
+        Adldap\Laravel\AdldapServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -232,6 +233,7 @@ return [
         'Captcha' => Mews\Captcha\Facades\Captcha::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'Adldap' => Adldap\Laravel\Facades\Adldap::class,
     ],
 
 ];

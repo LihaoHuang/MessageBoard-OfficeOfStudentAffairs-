@@ -11,12 +11,19 @@
 |
 */
 
-Route::get('/{board_kind?}', ['uses' => 'MessageBoardController@index']);
+//Auth::routes();
 
-Route::get('/board_notice', function () {
-    return view('board_notice');
-});
+Route::post('/login', ['as' => 'login', 'uses' => 'Auth\LoginController@login']);
+
+Route::get('/logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
+
+Route::get('/board_notice', ['as' => 'board_notice', 'uses' => 'MessageBoardController@board_notice']);
+
+Route::get('/{board_kind?}', ['as' => 'index', 'uses' => 'MessageBoardController@index']);
+
 
 Route::get('/get_captcha/{config?}', function (\Mews\Captcha\Captcha $captcha, $config = 'default') {
     return $captcha->src($config);
 });
+
+Route::get('/home', 'HomeController@index')->name('home');

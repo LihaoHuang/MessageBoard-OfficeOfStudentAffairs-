@@ -22,15 +22,10 @@
                         留言分類
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-                        <a class="dropdown-item" href="/"><i class="fas fa-star"></i> 宿舍</a>
-                        <a class="dropdown-item" href="/"><i class="fas fa-star"></i> 租屋</a>
-                        <a class="dropdown-item" href="/"><i class="fas fa-star"></i> 學生活動</a>
-                        <a class="dropdown-item" href="/"><i class="fas fa-star"></i> 社團</a>
-                        <a class="dropdown-item" href="/"><i class="fas fa-star"></i> 獎助學金</a>
-                        <a class="dropdown-item" href="/"><i class="fas fa-star"></i> 急難救助</a>
-                        <a class="dropdown-item" href="/"><i class="fas fa-star"></i> 助學</a>
-                        <a class="dropdown-item" href="/"><i class="fas fa-star"></i> 貸款</a>
-                        <a class="dropdown-item" href="/"><i class="fas fa-star"></i> 工讀以及校內外安全</a>
+                        <a class="dropdown-item" href="/"><i class="fas fa-star"></i> 不分類</a>
+                        @foreach($boardkind as $index => $kind)
+                            <a class="dropdown-item" href="/{{$kind->KIND_SN}}"><i class="fas fa-star"></i> {{$kind->KIND_DESC}}</a>
+                        @endforeach
                     </div>
                 </li>
             </ul>

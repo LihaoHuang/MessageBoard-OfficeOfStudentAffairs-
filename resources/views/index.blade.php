@@ -4,6 +4,13 @@
 
 @section('content')
 <!-- Page Content -->
+@if(!Session::has('per'))
+    <button class="btn btn btn-success" style="z-index:999;position: fixed;right: 20px;bottom: 150px;" onclick="document.getElementById('InputAccount').focus();alert('請先進行登入!');"><i class="fas fa-comment-alt"></i> 我要留言</button>
+@else
+    <!-- Button trigger modal -->
+    <button class="btn btn btn-success" style="z-index:999;position: fixed;right: 20px;bottom: 150px;" data-toggle="modal" data-target="#MessageModel"><i class="fas fa-comment-alt"></i> 我要留言</button>
+@endif
+
 <div class="container" style="">
     <div class="row">
         <!-- Blog Entries Column -->
@@ -13,9 +20,9 @@
                 <small valign="center" align="center" valign="center">
                     留言板
                     <h5 style="display: inline">
-                        <span class="badge badge-pill badge-primary">宿舍</span>
+                        <span class="badge badge-pill badge-primary"> {{is_null($board_kind)?"不分類":($boardkind[$board_kind-1]->KIND_DESC)}}</span>
                     </h5>
-                    @if(false)
+                    @if(!Session::has('per'))
                         <button type="button" id="message-btn" class="btn btn-success" onclick="document.getElementById('InputAccount').focus();alert('請先進行登入!');" style="float:right;">
                             <i class="fas fa-comment-alt"></i> 我要留言
                         </button>
@@ -29,7 +36,7 @@
             </h1>
 
             <!-- Blog Post -->
-            @foreach($message as $m_index => $m)
+            @foreach($messages as $m_index => $m)
             <div class="card border-info article">
                 <div class="card border-light post">
                     <div class="card-header text-muted">

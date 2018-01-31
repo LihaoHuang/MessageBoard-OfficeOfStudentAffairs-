@@ -48,6 +48,9 @@
         </style>
     </head>
     <body>
+        @if (session('message'))
+            <script> alert('{{ session('message') }}') </script>
+        @endif
 
         <!-- navbar start -->
         @include('layouts.partials.navbar')
@@ -61,14 +64,8 @@
         @include('layouts.partials.footer')
         <!-- footer -->
 
-        @if(false)
-            <button class="btn btn btn-success" style="z-index:999;position: fixed;right: 20px;bottom: 150px;" onclick="document.getElementById('InputAccount').focus();alert('請先進行登入!');"><i class="fas fa-comment-alt"></i> 我要留言</button>
-        @else
-            <!-- Button trigger modal -->
-            <button class="btn btn btn-success" style="z-index:999;position: fixed;right: 20px;bottom: 150px;" data-toggle="modal" data-target="#MessageModel"><i class="fas fa-comment-alt"></i> 我要留言</button>
-        @endif
 
-        <a class="btn btn btn-secondary" style="z-index:999;position: fixed;right: 20px;bottom: 100px;" href="javascript:scroll(0,0)"><i class="fas fa-chevron-up"></i> Top</a>
+        <a id="goTop" class="btn btn btn-secondary" style="z-index:999;position: fixed;right: 20px;bottom: 100px;" href="javascript:scroll(0,0)"><i class="fas fa-chevron-up"></i> Top</a>
 
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -80,8 +77,20 @@
         <script src="/vendor/unisharp/laravel-ckeditor/adapters/jquery.js"></script>
         <script>
             $(function () {
+                // Textarea輸入框
                 $('textarea').ckeditor();
 
+                // Go Top 按鈕滑動效果
+                $.extend($.easing, {
+                    easeOutExpo: function (x, t, b, c, d) {
+                        return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+                    }
+                });
+                $("#goTop").click(function(){
+                    $("html, body").animate({scrollTop: 0}, 1000, "easeOutExpo");
+                });
+
+                //驗證碼
                 $('img.captcha-img').on('click', function () {
                     var captcha = $(this);
                     var config = captcha.data('refresh-config');

@@ -2,22 +2,23 @@
     <div class="card my-4 ">
         <h5 class="card-header text-white bg-info">個人資料</h5>
         <div class="card-body">
-            @if(true)
-                <form>
+            @if(!Session::has('per'))
+                <form id="login_form" class="form-horizontal" method="post" action="login">
+                    {{ csrf_field() }}
                     <div class="form-group">
-                        <input type="text" class="form-control" id="InputAccount" aria-describedby="emailHelp" placeholder="校務行政帳號" autofocus>
+                        <input type="text" class="form-control" id="InputAccount" name="InputAccount" aria-describedby="emailHelp" placeholder="校務行政帳號" autofocus>
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" id="InputPassword" placeholder="密碼">
+                        <input type="password" class="form-control" id="InputPassword" name="InputPassword" placeholder="密碼">
                     </div>
-                    <button type="submit" class="btn btn-primary">登入</button>
+                    <button form="login_form" type="submit" class="btn btn-primary">登入</button>
                 </form>
             @else
-                帳號: 40343232<br/>
-                姓名: 黃立豪<br/>
-                信箱: 40343232@gm.nfu.edu.tw
-                登入時間: 2018/01/23
-                <button type="submit" class="btn btn-danger">登出</button>
+                帳號: {{Session::get('per')}}@if(Session::get('is_per')) <span style="color: blue;">(管理者)</span>@endif<br/>
+                姓名: {{Session::get('name')}}<br/>
+                信箱: {{Session::get('email')}}<br/>
+                登入時間: {{Session::get('time')}}<br/>
+                <a onclick="return confirm('確定要登出嗎?');" href="logout" class="btn btn-danger">登出</a>
             @endif
         </div>
     </div>
@@ -46,15 +47,10 @@
     <div class="card my-4 card card-inverse card-warning">
         <h5 class="card-header text-white bg-info">留言分類</h5>
         <ul class="list-group list-group-flush">
-            <li class="list-group-item"><a href="#"  style="color:black;"><i class="fas fa-star"></i> 宿舍</a></li>
-            <li class="list-group-item"><a href="#"  style="color:black;"><i class="fas fa-star"></i> 租屋</a></li>
-            <li class="list-group-item"><a href="#"  style="color:black;"><i class="fas fa-star"></i> 學生活動</a></li>
-            <li class="list-group-item"><a href="#"  style="color:black;"><i class="fas fa-star"></i> 社團</a></li>
-            <li class="list-group-item"><a href="#"  style="color:black;"><i class="fas fa-star"></i> 獎助學金</a></li>
-            <li class="list-group-item"><a href="#"  style="color:black;"><i class="fas fa-star"></i> 急難救助</a></li>
-            <li class="list-group-item"><a href="#"  style="color:black;"><i class="fas fa-star"></i> 助學</a></li>
-            <li class="list-group-item"><a href="#"  style="color:black;"><i class="fas fa-star"></i> 貸款</a></li>
-            <li class="list-group-item"><a href="#"  style="color:black;"><i class="fas fa-star"></i> 工讀以及校內外安全</a></li>
+            <li class="list-group-item"><a href="/"  style="color:black;"><i class="fas fa-star"></i> 不分類</a></li>
+            @foreach($boardkind as $index => $kind)
+                <li class="list-group-item"><a href="/{{$kind->KIND_SN}}"  style="color:black;"><i class="fas fa-star"></i> {{$kind->KIND_DESC}}</a></li>
+            @endforeach
         </ul>
     </div>
 </div>
