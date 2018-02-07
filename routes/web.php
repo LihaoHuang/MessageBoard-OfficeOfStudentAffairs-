@@ -17,7 +17,15 @@ Route::post('/login', ['as' => 'login', 'uses' => 'Auth\LoginController@login'])
 
 Route::get('/logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 
+Route::post('/message', ['as' => 'message', 'uses' => 'MessageBoardController@message']);
+
+Route::post('/response', ['as' => 'response', 'uses' => 'MessageBoardController@response']);
+
+Route::post('/delete/{id}', ['as' => 'delete', 'uses' => 'MessageBoardController@delete']);
+
 Route::get('/board_notice', ['as' => 'board_notice', 'uses' => 'MessageBoardController@board_notice']);
+
+Route::get('/page/{page?}', ['as' => 'page', 'uses' => 'MessageBoardController@page']);
 
 Route::get('/{board_kind?}', ['as' => 'index', 'uses' => 'MessageBoardController@index']);
 
