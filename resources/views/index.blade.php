@@ -20,7 +20,7 @@
 
 <!-- Page Content -->
 @if(!Session::has('per'))
-    <button class="btn btn btn-success" style="z-index:999;position: fixed;right: 20px;bottom: 150px;" onclick="document.getElementById('InputAccount').focus();alert('請先進行登入!');"><i class="fas fa-comment-alt"></i> 我要留言</button>
+    <button class="btn btn btn-success" style="z-index:999;position: fixed;right: 20px;bottom: 150px;" onclick="document.getElementById('InputAccount').focus();alert('請先進行登入!');"><i class="fas fa-comments"></i></button>
 @else
     <!-- Button trigger modal -->
     <button class="btn btn btn-success" style="z-index:999;position: fixed;right: 20px;bottom: 150px;" data-toggle="modal" data-target="#MessageModel"><i class="fas fa-comments"></i></button>
@@ -87,9 +87,15 @@
 
                             @endif
 
-                            <button type="button" onclick="response('{{$m->BOARD_SN}}', '{{$m->BOARD_KIND}}')" class="btn btn-sm btn-info" data-toggle="modal" data-target="#ResponseModel">
-                                回覆 <i class="fas fa-check"></i>
-                            </button>
+                            @if(!Session::has('per'))
+                                <button type="button" class="btn btn-sm btn-info" onclick="document.getElementById('InputAccount').focus();alert('請先進行登入!');">
+                                    回覆 <i class="fas fa-check"></i>
+                                </button>
+                            @else
+                                <button type="button" onclick="response('{{$m->BOARD_SN}}', '{{$m->BOARD_KIND}}')" class="btn btn-sm btn-info" data-toggle="modal" data-target="#ResponseModel">
+                                    回覆 <i class="fas fa-check"></i>
+                                </button>
+                            @endif
                         </div>
                     </div>
                     <div class="card-body">
