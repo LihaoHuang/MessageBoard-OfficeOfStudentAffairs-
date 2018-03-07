@@ -94,7 +94,7 @@
                 $('img.captcha-img').on('click', function () {
                     var captcha = $(this);
                     var config = captcha.data('refresh-config');
-                    console.log(config);
+//                    console.log(config);
                     $.ajax({
                         method: 'GET',
                         url: '/get_captcha/' + config,

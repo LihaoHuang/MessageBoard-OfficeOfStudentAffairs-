@@ -8,6 +8,10 @@
         $("#response_id").html(paddingLeft($id, 4));
         $("#ResponseID").val($id);
         $("#ResponseType").val($kind);
+        $("#btn-captcha2").click();
+    }
+    function message(){
+        $("#btn-captcha1").click();
     }
     function paddingLeft(str,lenght){
         if(str.length >= lenght)
@@ -23,7 +27,7 @@
     <button class="btn btn btn-success" style="z-index:999;position: fixed;right: 20px;bottom: 150px;" onclick="document.getElementById('InputAccount').focus();alert('請先進行登入!');"><i class="fas fa-comments"></i></button>
 @else
     <!-- Button trigger modal -->
-    <button class="btn btn btn-success" style="z-index:999;position: fixed;right: 20px;bottom: 150px;" data-toggle="modal" data-target="#MessageModel"><i class="fas fa-comments"></i></button>
+    <button class="btn btn btn-success" style="z-index:999;position: fixed;right: 20px;bottom: 150px;" onclick="message();" data-toggle="modal" data-target="#MessageModel"><i class="fas fa-comments"></i></button>
 @endif
 
 <div class="container" style="">
@@ -43,7 +47,7 @@
                         </button>
                     @else
                         <!-- Button trigger modal -->
-                        <button type="button" id="message-btn" class="btn btn-success" style="float:right;" data-toggle="modal" data-target="#MessageModel">
+                        <button type="button" id="message-btn" class="btn btn-success" onclick="message();" style="float:right;" data-toggle="modal" data-target="#MessageModel">
                             <i class="fas fa-comments"></i> 我要留言
                         </button>
                     @endif
@@ -54,7 +58,7 @@
                 <li class="page-item">
                     <a class="page-link" href="/page/{{Session::get('page')-1}}"><i class="fas fa-long-arrow-alt-left"></i></a>
                 </li>
-                @for($i=0,$p=1;$i<$message_num;$i+=5,$p++)
+                @for($i=0,$p=1;$i<$message_num;$i+=10,$p++)
                     @if(Session::get('page') == $p)
                         <li class="page-item active">
                             <a class="page-link" href="/page/{{$p}}">{{$p}}</a>
@@ -72,7 +76,8 @@
 
             <!-- Blog Post -->
             @foreach($messages as $m_index => $m)
-            <div class="card border-info article">
+                @if($m->BOARD_DEL == "0")
+                <div class="card border-info article">
                 <div class="card border-light post">
                     <div class="card-header text-muted">
                         <span href="#" class="badge badge-success">{{sprintf("%04d", $m->BOARD_SN)}}</span>
@@ -108,27 +113,43 @@
                 @foreach($response as $r_index => $re)
                     @if($m_index == $r_index)
                         @foreach($re as $r)
-                        <div class="card border-light message">
-                            <div class="card-header text-muted">
-                                留言者: <a href="mailto:{{$r->BOARD_EMAIL}}">{{$r->BOARD_PETNAME}}</a> ({{substr($r->BOARD_TIME, 0, 16)}})
-                                <div style="float: right">
-                                    @if(Session::get('is_per'))
-                                        {!! Form::open(['route' => ['delete', $r->BOARD_SN], 'method' => 'post', 'style' => 'display:inline', 'onsubmit' => 'return confirm("刪除後，將會無法回復留言，確定要刪除嗎?");']) !!}
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            刪除留言 <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        {!! Form::close() !!}
-                                    @endif
+                            @if($r->BOARD_DEL == "0")
+                                <div class="card border-light message">
+                                    <div class="card-header text-muted">
+                                        留言者: <a href="mailto:{{$r->BOARD_EMAIL}}">{{$r->BOARD_PETNAME}}</a> ({{substr($r->BOARD_TIME, 0, 16)}})
+                                        <div style="float: right">
+                                            @if(Session::get('is_per'))
+                                                {!! Form::open(['route' => ['delete', $r->BOARD_SN], 'method' => 'post', 'style' => 'display:inline', 'onsubmit' => 'return confirm("刪除後，將會無法回復留言，確定要刪除嗎?");']) !!}
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    刪除留言 <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                                {!! Form::close() !!}
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">{!!$r->BOARD_CONTENT!!}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text">{!!$r->BOARD_CONTENT!!}</p>
-                            </div>
-                        </div>
+                            @else
+                                <div class="card border-light message">
+                                    <div class="card-header text-muted">
+                                        此留言已被管理員刪除
+                                    </div>
+                                </div>
+                            @endif
                         @endforeach
                     @endif
                 @endforeach
             </div>
+                @else
+                <div class="card border-info article">
+                    <div class="card-header text-muted">
+                        <span href="#" class="badge badge-success">{{sprintf("%04d", $m->BOARD_SN)}}</span>
+                        此留言已被管理員刪除
+                    </div>
+                </div>
+                @endif
             @endforeach
 
             {{--temp_id >= ". (($page*10)-9) ." AND temp_id <= ". $page*10--}}
@@ -137,7 +158,7 @@
                 <li class="page-item">
                     <a class="page-link" href="/page/{{Session::get('page')-1}}"><i class="fas fa-long-arrow-alt-left"></i></a>
                 </li>
-                @for($i=0,$p=1;$i<$message_num;$i+=5,$p++)
+                @for($i=0,$p=1;$i<$message_num;$i+=10,$p++)
                     @if(Session::get('page') == $p)
                         <li class="page-item active">
                             <a class="page-link" href="/page/{{$p}}">{{$p}}</a>
@@ -207,10 +228,10 @@
                     </div>
                     <div class="form-group">
                         <label for="MessageCaptcha" class="col-form-label">
-                            驗證碼(必填):
-                            <img src="" alt="captcha" class="captcha-img myMOUSE" data-refresh-config="default" data-toggle="tooltip" data-placement="top" title="點選此處，更新驗證碼">
+                            驗證碼(必填,不分大小寫):
+                            <img src="" alt="captcha" class="captcha-img myMOUSE" id="btn-captcha1" data-refresh-config="default" data-toggle="tooltip" data-placement="top" title="點選此處，更新驗證碼">
                             <i class="fas fa-long-arrow-alt-left"></i>
-                            <span>點我產生驗證碼</span>
+                            <span>點我重新產生驗證碼</span>
                         </label>
                         <input type="text" class="form-control" name="MessageCaptcha" id="MessageCaptcha" placeholder="驗證碼" required>
                     </div>
@@ -258,10 +279,10 @@
                     </div>
                     <div class="form-group">
                         <label for="ResponseCaptcha" class="col-form-label">
-                            驗證碼(必填):
-                            <img src="" alt="captcha" class="captcha-img myMOUSE" data-refresh-config="default" data-toggle="tooltip" data-placement="top" title="點選此處，更新驗證碼"">
+                            驗證碼(必填,不分大小寫):
+                            <img src="" alt="captcha" class="captcha-img myMOUSE" id="btn-captcha2" data-refresh-config="default" data-toggle="tooltip" data-placement="top" title="點選此處，更新驗證碼"">
                             <i class="fas fa-long-arrow-alt-left"></i>
-                            <span>點我產生驗證碼</span>
+                            <span>點我重新產生驗證碼</span>
                         </label>
                         <input type="text" class="form-control" name="ResponseCaptcha" id="ResponseCaptcha" placeholder="驗證碼" required>
                     </div>

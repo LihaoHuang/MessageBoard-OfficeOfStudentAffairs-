@@ -25,7 +25,7 @@ class MessageBoardController extends Controller
         //查找所有主流言
         $option = "";
         if (!is_null($board_kind)) $option = " AND board_kind = " . $board_kind;
-        $all_messages = DB::select("select * from osa_board inner join osa_boardkind on osa_board.board_kind = osa_boardkind.KIND_SN where BOARD_PSN = 0 AND BOARD_DEL = '0' " . $option . " order by BOARD_TIME DESC");
+        $all_messages = DB::select("select * from osa_board inner join osa_boardkind on osa_board.board_kind = osa_boardkind.KIND_SN where BOARD_PSN = 0 " . $option . " order by BOARD_SN DESC");
 
         //沒有頁數時，則瀏覽第一頁
         if(!Session::has('page')){
@@ -33,34 +33,35 @@ class MessageBoardController extends Controller
         }
 
         //頁數超過筆數時，則瀏覽最後一頁
-        if((Session::get('page')-1)*5 > count($all_messages)){
+        if((Session::get('page')-1)*10 > count($all_messages)){
             Session::put('page', Session::get('page')-1);
         }
 
         //篩選該頁數留言
         $messages = [];
-        if(Session::get('page')*5 <= count($all_messages)){
-            for ($i=(Session::get('page')*5-4)-1; $i<Session::get('page')*5; $i++){
+        if(Session::get('page')*10 <= count($all_messages)){
+            for ($i=(Session::get('page')*10-9)-1; $i<Session::get('page')*10; $i++){
                 array_push($messages, $all_messages[$i]);
             }
         }else{
-            for ($i=(Session::get('page')*5-4)-1; $i<count($all_messages); $i++){
+            for ($i=(Session::get('page')*10-9)-1; $i<count($all_messages); $i++){
                 array_push($messages, $all_messages[$i]);
             }
         }
 
+//        dd($all_messages, $messages);
         //查找主流言之回覆內容
         $response = [];
         foreach ($messages as $key=>$message){
             if ($message->BOARD_PSN == 0)
-                $response[$key] = DB::select("select * from osa_board where BOARD_DEL = '0' AND BOARD_PSN =" . $message->BOARD_SN);
+                $response[$key] = DB::select("select * from osa_board where BOARD_PSN =" . $message->BOARD_SN);
         }
 
         //查找留言類型
         $boardkind = DB::select("select * from osa_boardkind");
 
         //查找主流言總數
-        $message_num = DB::table('osa_board')->whereRaw("BOARD_DEL = '0' AND BOARD_PSN = '0' " . $option . "")->count();
+        $message_num = DB::table('osa_board')->whereRaw("BOARD_PSN = '0' " . $option . "")->count();
 
         return view('index', compact("messages", "response", "boardkind", "board_kind", "message_num"));
     }

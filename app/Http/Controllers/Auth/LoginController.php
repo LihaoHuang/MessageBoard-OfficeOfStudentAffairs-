@@ -71,7 +71,7 @@ class LoginController extends Controller
             Session::put('email', $search[0]['attributes']['mail'][0]);
             Session::put('time', substr(Carbon::now(), 0, 16));
 
-            $query = DB::select("select * from osa_per WHERE PER_ACC = " . $search[0]['cn'][0]);
+            $query = DB::select("select * from osa_per WHERE PER_ACC = '" . $search[0]['cn'][0] . "'");
             if ($query==[]){
                 Session::put('is_per', false);
             }else{
